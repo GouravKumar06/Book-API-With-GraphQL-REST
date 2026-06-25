@@ -1,7 +1,8 @@
 require('dotenv').config();
 const User = require('../schema/userSchema')
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { sendSuccess,sendError } = require('../helpers/responseHelpers');
 
 
 exports.register = async(req,res) => {
@@ -15,11 +16,12 @@ exports.register = async(req,res) => {
             role
         })
 
-        return res.status(201).json({
-            success:true,
-            message : "User resistered Successfully",
+        return sendSuccess(
+            res,
+            201,
+            "User Registered Successfully",
             newUser
-        })
+        );
 
     }catch(error){
         console.log(error.message)
@@ -28,27 +30,30 @@ exports.register = async(req,res) => {
             const field = Object.keys(error.keyValue)[0]; 
             const value = Object.values(error.keyValue)[0];
 
-            return res.status(400).json({
-                success: false,
-                message: "Duplicate Error",
-                errors: [`This ${field} '${value}' is already registered.`]
-            });
+            return sendError(
+                res,
+                400,
+                "Duplicate Error",
+                [`${field} '${value}' is already registered.`]
+            );
         }
 
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(err => err.message);
             
-            return res.status(400).json({
-                success: false,
-                message: "Validation Error",
-                errors: messages 
-            });
+            return sendError(
+                res,
+                400,
+                "Validation Error",
+                messages
+            );
         }
 
-        return res.status(500).json({
-            success:false,
-            message : "internal server error"
-        })
+        return sendError(
+            res,
+            500,
+            "Internal Server Error"
+        );
     }
 }
 
@@ -58,10 +63,11 @@ exports.login = async(req,res) => {
         const { input, password } = req.body
 
         if(!input || !password ){
-            return res.status(400).json({
-                success:false,
-                message : "All Fields Are required"
-            })
+            return sendError(
+                res,
+                400,
+                "All Fields Are Required"
+            );
         }
 
         const findData = await User.findOne({
@@ -72,19 +78,21 @@ exports.login = async(req,res) => {
         })
 
         if(!findData){
-            return res.status(400).json({
-                success:false,
-                message : "Invalid Credentials"
-            })
+            return sendError(
+                res,
+                401,
+                "Invalid Credentials"
+            );
         }
 
         const matchPassword = await bcrypt.compare(password,findData.password)
 
         if(!matchPassword){
-            return res.status(500).json({
-                success:false,
-                message : "Invalid Credentials"
-            })
+            return sendError(
+                res,
+                401,
+                "Invalid Credentials"
+            );
         }
 
         const payload = {
@@ -97,19 +105,20 @@ exports.login = async(req,res) => {
             expiresIn : '1d'
         })
 
-        return res.status(201).json({
-            success:true,
-            message : "User login Successfully",
-            token
-        })
-
+        return sendSuccess(
+            res,
+            200,
+            "User Login Successfully",
+            { token }
+        );
     }catch(error){
         console.log(error)
 
-        return res.status(500).json({
-            success : false,
-            message : "internal server error"
-        })
+        return sendError(
+            res,
+            500,
+            "Internal Server Error"
+        );
     }
 }
 
@@ -120,10 +129,11 @@ exports.changePassowrd = async(req,res) => {
         const user = await User.findById(userId)
 
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found or account has been deleted."
-            });
+            return sendError(
+                res,
+                404,
+                "User not found or account has been deleted."
+            );
         }
 
         const { oldPassword,newPassword } = req.body;
@@ -136,10 +146,11 @@ exports.changePassowrd = async(req,res) => {
         }
 
         if (oldPassword === newPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "New password cannot be the same as the old password."
-            });
+            return sendError(
+                res,
+                400,
+                "Both old password and new password are required."
+            );
         }
 
         const isMatch = await bcrypt.compare(oldPassword,user.password)
@@ -156,26 +167,28 @@ exports.changePassowrd = async(req,res) => {
         const ValidationError = user.validateSync();
 
         if(ValidationError && validationError.errors.password){
-            return res.status(400).json({
-                success: false,
-                message: "Validation Error",
-                errors: [validationError.errors.password.message]
-            });
+            return sendError(
+                res,
+                400,
+                "Validation Error",
+                [validationError.errors.password.message]
+            );
         }
 
         await user.save();
-    
-        return res.status(201).json({
-            success:true,
-            message : "passowrd changed Successfully",
-        })
 
+        return sendSuccess(
+            res,
+            200,
+            "password changed Successfully",
+        );
     }catch(error){
         console.log(error.message)
 
-        return res.status(500).json({
-            success:false,
-            message : "internal server error"
-        })
+        return sendError(
+            res,
+            500,
+            "Internal Server Error"
+        );
     }
 }
