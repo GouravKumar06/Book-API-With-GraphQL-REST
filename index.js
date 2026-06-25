@@ -17,20 +17,26 @@ const configureCors = require('./config/corsConfig');
 const bookRoutes = require('./routes/book.routes');
 const authRoutes = require('./routes/auth.routes');
 const { requestLogger } = require('./middleware/loggerMiddleware');
+const { urlVersioning } = require('./middleware/apiVersioning');
+const createRateLimiter = require('./middleware/rateLimiter');
 
 
 const app = express();
 
 const PORT = process.env.PORT || 3000
+const Version = process.env.ALLOWED_VERSION
+
+app.use(requestLogger)
 
 // middleware to parse the json data
 app.use(express.json());
 app.use(configureCors());
 
-app.use(requestLogger)
+app.use("/api", urlVersioning(Version));
 
-app.use('/api/books/v1',bookRoutes)
-app.use('/api/auth/v1',authRoutes)
+
+app.use('/api/v1/books',createRateLimiter(50,600),bookRoutes)
+app.use('/api/v1/auth',createRateLimiter(10,600),authRoutes)
 
 
 app.get("/healthcheck",(req,res)=>{
