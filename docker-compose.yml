@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mongodb_database: 
+    image: mongo:latest       
+    container_name: my_mongodb
+    ports:
+      - "27017:27017"   
+
+  redis_database: 
+    image: redis:alpine        
+    container_name: my_redis
+    ports:
+      - "6379:6379"            
+
+  web-app:
+    build: .                   
+    container_name: my_node_app
+    ports:
+      - "${PORT}:${PORT}"     
+    environment:
+      - PORT=${PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - ALLOWED_VERSION=${ALLOWED_VERSION}
+      
+      - MONGO_URL=mongodb://mongodb_database:27017/mydb
+      - REDIS_HOST=redis_database
+      - REDIS_PORT=6379
+
+    depends_on:
+      - mongodb_database               
+      - redis_database   

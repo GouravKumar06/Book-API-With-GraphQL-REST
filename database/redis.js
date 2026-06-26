@@ -1,8 +1,7 @@
 const redis = require('redis');
 
 const client = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port:process.env.REDIS_PORT
+    url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
 })
 
 //add event listener
