@@ -6,7 +6,8 @@ exports.uploadToCloudinary = (buffer) => {
 
         const stream = cloudinary.uploader.upload_stream(
             {
-                folder:"books"
+                folder:"books",
+                timeout: 60000
             },
             (error,result)=>{
                 if(error) return reject(error);

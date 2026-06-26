@@ -3,6 +3,7 @@ const Book = require('../schema/bookSchema')
 const { uploadToCloudinary } = require('../utils/cloudinary.util');
 const cloudinary = require('../config/cloudinary')
 const fs = require('fs');
+const client = require('../database/redis');
 
 exports.addBook = async (req,res) => {
     try{
@@ -34,12 +35,25 @@ exports.addBook = async (req,res) => {
                 newBook.status = "Success";
                 await newBook.save();
                 console.log(`🚀 [Background] Book ${newBook._id} successfully processed and saved.`);
+
+                const eventPayload = {
+                    bookId: newBook._id,
+                    title: newBook.title,
+                    author: newBook.author,
+                    uploadedBy: newBook.uploadedBy,
+                    timestamp: new Date()
+                };
+
+                await client.publish('book:created', JSON.stringify(eventPayload));
+                console.log(`📢 [Pub/Sub] Event published to 'book:created' channel.`);
             })
             .catch( async (bgError) => {
                 console.error(`❌ [Background Error] Failed for Book ${newBook._id}:`, bgError);
                 newBook.status = "Failed";
                 await newBook.save();
             });
+
+
 
         return res.status(201).json({
             success: true,
