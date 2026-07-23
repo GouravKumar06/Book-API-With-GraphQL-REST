@@ -141,7 +141,42 @@ docker-compose down           # stop and remove containers
 
 ---
 
-## 📝 Notes
+## � Docker Hub: What others can run
+
+If you push your Docker image to Docker Hub and make it public, others can run it
+without cloning your Git repository.
+
+Example commands they would use:
+
+```bash
+docker pull yourusername/book-store-api:latest
+
+docker run -d -p 8080:8080 \
+  -e PORT=8080 \
+  -e JWT_SECRET=their_jwt_secret \
+  -e CLOUDINARY_CLOUD_NAME=... \
+  -e CLOUDINARY_API_KEY=... \
+  -e CLOUDINARY_API_SECRET=... \
+  -e FRONTEND_URL=http://localhost:3000 \
+  -e ALLOWED_VERSION=v1 \
+  yourusername/book-store-api:latest
+```
+
+Or with `docker-compose.yml` if you publish a compose setup that uses your image.
+
+### Does pushing to Docker Hub share my code?
+
+- If you push a **public image**, anyone can pull and run that image.
+- The Docker image contains your app files and dependencies, so the code is
+  packaged inside the image.
+- Users do not need your Git repo to run it, but they can still inspect the image
+  and extract files if they want to.
+- If you want to keep code private, do not publish a public image; use a
+  private Docker Hub repository or keep running from your repo only.
+
+---
+
+## �📝 Notes
 
 - `.env` is git-ignored on purpose — never commit real secrets.
 - Cloudinary keys are personal; each developer must use their own account.
