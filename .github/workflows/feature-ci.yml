@@ -3,27 +3,26 @@ name: Feature Branch CI
 on:
   push:
     branches:
-      - "feature/**"
+      - 'feature/**'
 
 jobs:
-
   code-quality:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20  
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Install dependencies
-      run: npm ci --legacy-peer-deps
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
 
-    - name: Run prettier formatter
-      run: npm run format:check
+      - name: Run prettier formatter
+        run: npm run format:check
 
-    - name: Run lint test
-      run: npm run lint
+      - name: Run lint test
+        run: npm run lint
