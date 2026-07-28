@@ -1,0 +1,6 @@
+name: on PR from features to development
+
+on:
+  pull_request:
+    branches:
+      - development
