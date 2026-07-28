@@ -8,16 +8,16 @@ It includes authentication (JWT), image uploads (Cloudinary), API versioning, ra
 
 ## 🧰 Tech Stack
 
-| Layer            | Technology                          |
-| ---------------- | ----------------------------------- |
-| Runtime          | Node.js 20                          |
-| Web framework    | Express 5                           |
-| GraphQL          | Apollo Server                       |
-| Database         | MongoDB (Mongoose)                  |
-| Cache / Pub-Sub  | Redis                               |
-| Auth             | JWT (jsonwebtoken)                  |
-| File uploads     | Multer + Cloudinary                 |
-| Containerization | Docker + Docker Compose             |
+| Layer            | Technology              |
+| ---------------- | ----------------------- |
+| Runtime          | Node.js 20              |
+| Web framework    | Express 5               |
+| GraphQL          | Apollo Server           |
+| Database         | MongoDB (Mongoose)      |
+| Cache / Pub-Sub  | Redis                   |
+| Auth             | JWT (jsonwebtoken)      |
+| File uploads     | Multer + Cloudinary     |
+| Containerization | Docker + Docker Compose |
 
 ---
 
@@ -41,18 +41,18 @@ This project needs a `.env` file. The repo **does not include** the real `.env`
 cp .env.example .env
 ```
 
-| Variable                | Description                                    |
-| ----------------------- | ---------------------------------------------- |
-| `PORT`                  | Port the server runs on (e.g. `8080`)          |
-| `ALLOWED_VERSION`       | Allowed API version (e.g. `v1`)                |
-| `MONGO_URL`             | MongoDB connection string                      |
-| `REDIS_HOST`            | Redis host                                     |
-| `REDIS_PORT`            | Redis port (default `6379`)                    |
-| `JWT_SECRET`            | Secret used to sign JWT tokens                 |
-| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name                     |
-| `CLOUDINARY_API_KEY`    | Your Cloudinary API key                        |
-| `CLOUDINARY_API_SECRET` | Your Cloudinary API secret                     |
-| `FRONTEND_URL`          | Frontend origin allowed by CORS                |
+| Variable                | Description                           |
+| ----------------------- | ------------------------------------- |
+| `PORT`                  | Port the server runs on (e.g. `8080`) |
+| `ALLOWED_VERSION`       | Allowed API version (e.g. `v1`)       |
+| `MONGO_URL`             | MongoDB connection string             |
+| `REDIS_HOST`            | Redis host                            |
+| `REDIS_PORT`            | Redis port (default `6379`)           |
+| `JWT_SECRET`            | Secret used to sign JWT tokens        |
+| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name            |
+| `CLOUDINARY_API_KEY`    | Your Cloudinary API key               |
+| `CLOUDINARY_API_SECRET` | Your Cloudinary API secret            |
+| `FRONTEND_URL`          | Frontend origin allowed by CORS       |
 
 ---
 
@@ -65,6 +65,7 @@ There are **two ways** to run this project. Pick whichever you prefer.
 Use this if you already have MongoDB and Redis installed and running locally.
 
 **Prerequisites:**
+
 - Node.js 20+
 - A running MongoDB instance (default `mongodb://localhost:27017`)
 - A running Redis instance (default `localhost:6379`)
@@ -100,6 +101,7 @@ Use this if you **don't** want to install MongoDB / Redis yourself.
 Docker will spin up MongoDB, Redis, and the app together in isolated containers.
 
 **Prerequisites:**
+
 - Docker Desktop installed and running
 
 **Steps:**
@@ -120,11 +122,11 @@ docker-compose up --build
 That's it. Docker Compose reads your `.env` for the `${...}` values and starts
 three services:
 
-| Service            | What it is        | Port          |
-| ------------------ | ----------------- | ------------- |
-| `mongodb_database` | MongoDB           | `27017`       |
-| `redis_database`   | Redis             | `6379`        |
-| `web-app`          | This Node.js API  | `${PORT}`     |
+| Service            | What it is       | Port      |
+| ------------------ | ---------------- | --------- |
+| `mongodb_database` | MongoDB          | `27017`   |
+| `redis_database`   | Redis            | `6379`    |
+| `web-app`          | This Node.js API | `${PORT}` |
 
 > ⚠️ Inside Docker, the app talks to MongoDB and Redis using the **service
 > names** (`mongodb_database`, `redis_database`) instead of `localhost`.

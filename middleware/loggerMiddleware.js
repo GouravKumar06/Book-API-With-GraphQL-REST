@@ -1,17 +1,14 @@
+const requestLogger = (req, res, next) => {
+  const timeStamp = new Date().toISOString();
 
+  const method = req.method;
+  const url = req.url;
 
-const requestLogger = (req,res,next) => {
-    const timeStamp = new Date().toISOString();
+  const userAgent = req.get('User-Agent');
 
-    const method = req.method
-    const url = req.url
+  console.log(`[${timeStamp}] -> ${method} with URL -> ${url} AND USER Agent -> [${userAgent}]`);
 
-    const userAgent = req.get('User-Agent')
+  next();
+};
 
-    console.log(`[${timeStamp}] -> ${method} with URL -> ${url} AND USER Agent -> [${userAgent}]`)
-
-    next()
-}
-
-
-module.exports = {requestLogger}
+module.exports = { requestLogger };

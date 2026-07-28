@@ -1,0 +1,5 @@
+name: automatic-test
+
+on:
+  push:
+    branches: []

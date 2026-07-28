@@ -1,4 +1,4 @@
-const { gql } = require('graphql-tag')
+const { gql } = require('graphql-tag');
 
 const typeDefs = gql`
   type User {
@@ -24,7 +24,7 @@ const typeDefs = gql`
 
   type Query {
     getProducts: [Product]
-    getSingleProduct(id:ID!) : Product
+    getSingleProduct(id: ID!): Product
   }
 
   type Mutation {
