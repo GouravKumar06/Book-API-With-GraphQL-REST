@@ -1,12 +1,12 @@
-name: ON PR IN DEVELOPMENT BRANCH
+name: Main Branch CI
 
 on:
   pull_request:
     branches:
-      - development
+      - main
 
 jobs:
-  build-and-lint:
+  main-branch-build:
     runs-on: ubuntu-latest
 
     steps:
