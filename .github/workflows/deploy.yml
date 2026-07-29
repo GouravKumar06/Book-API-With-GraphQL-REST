@@ -27,14 +27,14 @@ jobs:
         run: |
 
           docker build \
-          -t gourav98963/book-store-api:${{ github.sha }} .
+          -t gourav98963/book-store-backend:${{ github.sha }} .
 
       - name: Push Docker Image
 
         run: |
 
           docker push \
-          gourav98963/book-store-api:${{ github.sha }}
+          gourav98963/book-store-backend:${{ github.sha }}
 
       - name: Deploy EC2
 
