@@ -1,6 +1,28 @@
-name: on PR from features to development
+name: ON PR IN DEVELOPMENT BRANCH
 
 on:
   pull_request:
     branches:
       - development
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run prettier formatter
+        run: npm run format:check
+
+      - name: Run lint test
+        run: npm run lint
