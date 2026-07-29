@@ -41,6 +41,10 @@ app.get('/healthcheck', (req, res) => {
   res.send('this is health point check up');
 });
 
+app.get('/', (req, res) => {
+  res.send('testing');
+});
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
