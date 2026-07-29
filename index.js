@@ -46,6 +46,8 @@ const server = new ApolloServer({
   resolvers,
 });
 
+var unused = "this is not useed"
+
 const startServer = async () => {
   try {
     await connectDB();
