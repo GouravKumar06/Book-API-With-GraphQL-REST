@@ -6,7 +6,29 @@ on:
       - main
 
 jobs:
+  main-branch-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run prettier
+        run: npm run format:check
+
+      - name: Run lint
+        run: npm run lint
+
   deploy:
+    needs: main-branch-build
     runs-on: ubuntu-latest
 
     steps:
